@@ -25,6 +25,10 @@ Rewind Backend 是一个智能用户行为监控和分析系统，通过实时�
 3. **Consumption Layer（消费层）** - 智能建议和任务执行
 4. **Agent System（代理系统）** - 可扩展的任务执行框架
 
+
+用 cli 来启动后端服务，用yaml来配置config
+
+
 ## 详细设计
 
 ### 1. Perception Layer（感知层）
@@ -219,3 +223,122 @@ PORT=8000
 2. **更多 Agent**: 集成更多类型的智能助手
 3. **机器学习**: 基于用户行为模式进行个性化推荐
 4. **云端同步**: 可选的云端数据同步功能
+
+## 目录初步设计 
+
+```
+rewind_backend/
+├── main.py                        # CLI入口
+├── cli.py                         # Typer 命令行接口
+│
+├── config/
+│   ├── config.yaml                # 默认配置文件模板
+│   ├── loader.py                  # 解析 & 环境变量合并
+│   └── __init__.py
+│
+├── core/
+│   ├── db.py                      # sqlite3 封装（connect/query/insert/update）
+│   ├── models.py                  # 数据模型（RawRecord, Event, Activity, Task）
+│   ├── utils.py                   # 工具函数（时间、UUID、图像压缩、phash）
+│   ├── logger.py                  # 日志系统（按 config.logs_dir 输出）
+│   └── __init__.py
+│
+├── perception/
+│   ├── __init__.py
+│   ├── base.py                    # BaseCapture 抽象类
+│   ├── keyboard_capture.py
+│   ├── mouse_capture.py
+│   ├── screenshot_capture.py
+│   ├── manager.py                 # 异步任务管理（定时采集）
+│   └── storage.py                 # 滑动窗口缓存
+│
+├── processing/
+│   ├── __init__.py
+│   ├── filter_rules.py            # 键鼠事件筛选逻辑
+│   ├── summarizer.py              # 调用 LLM 生成 events_summary
+│   ├── merger.py                  # LLM 判断 activity 合并逻辑
+│   ├── pipeline.py                # 定时 raw_records→events→activity
+│   └── persistence.py             # 手写SQL持久化接口
+│
+├── consumption/
+│   ├── __init__.py
+│   ├── analyzer.py                # 从 activity 提取任务意图 (LLM)
+│   ├── planner.py                 # 匹配合适 agent，生成 Task
+│   ├── task_manager.py            # Task 状态管理
+│   ├── notifier.py                # WebSocket 推送封装
+│   └── runner.py                  # 异步任务执行调度
+│
+├── agents/
+│   ├── __init__.py
+│   ├── base.py                    # BaseAgent + 注册机制
+│   ├── registry.py
+│   ├── builtin/
+│   │   ├── browser_agent.py
+│   │   ├── file_agent.py
+│   │   └── shell_agent.py
+│   └── executor.py                # asyncio并行执行封装
+│
+├── llm/
+│   ├── __init__.py
+│   ├── client.py                  # 通用 LLM 客户端，支持多配置
+│   ├── prompt_templates.py        # summary / merge / analyze 提示词模板
+│   └── router.py                  # 根据调用层选择对应 LLM 配置
+│
+├── api/
+│   ├── __init__.py
+│   ├── routes/
+│   │   ├── perception.py
+│   │   ├── events.py
+│   │   ├── activities.py
+│   │   ├── tasks.py
+│   │   ├── agents.py
+│   │   └── system.py
+│   ├── websocket.py               # WebSocket 实时推送（广播）
+│   └── server.py                  # FastAPI 实例
+│
+├── tests/
+│   ├── test_processing.py
+│   ├── test_agents.py
+│   ├── test_pipeline.py
+│   └── test_api.py
+│
+├── scripts/
+│   ├── init_db.py
+│   ├── demo_run.py
+│   └── export_data.py
+│
+├── requirements.txt
+├── pyproject.toml
+└── README.md
+
+```
+
+
+| 目标            | 实现策略                                               |
+| ------------- | -------------------------------------------------- |
+| 统一 LLM Client | 所有层共用 `llm/client.py`，支持多配置（不同 model/base_url/key） |
+| 轻量数据库         | 使用 `sqlite3` + SQL 模块化封装，保证透明控制                    |
+| 异步 Agent      | 使用 `asyncio.gather` + `ThreadPoolExecutor` 实现并行执行  |
+| 实时推送          | 基于 `FastAPI` WebSocket 通道广播 activity/task 更新       |
+| 配置灵活          | YAML + 环境变量合并加载；支持多 LLM、路径、interval 配置             |
+
+
+## Quick Start
+
+```bash
+# 查看帮助
+uv run python main.py --help
+
+# 启动服务
+uv run python main.py start
+
+# 启动服务（调试模式）
+uv run python main.py start --debug
+
+# 使用自定义端口
+uv run python main.py start --port 8001
+
+# 其他命令
+uv run python main.py init-db
+uv run python main.py test
+```
