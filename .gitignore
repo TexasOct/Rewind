@@ -23,3 +23,5 @@ target
 *.njsproj
 *.sln
 *.sw?
+
+__pycache__/
