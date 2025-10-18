@@ -13,10 +13,18 @@
     ]
   },
   "app": {
-    "windows": [],
     "security": {
       "csp": null
-    }
+    },
+    "windows": [
+      {
+        "title": "Rewind",
+        "width": 1200,
+        "height": 800,
+        "decorations": false,
+        "transparent": false
+      }
+    ]
   },
   "bundle": {
     "active": true,
