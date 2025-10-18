@@ -523,5 +523,5 @@ python test_my_module.py
 ## 获取帮助
 
 - 查看 Tauri 官方文档：https://tauri.app/
-- PyTauri 文档：https://docs.tauri.app/
+- PyTauri 文档：https://pytauri.github.io/pytauri/latest/
 - Rust 错误解决：运行 `RUST_BACKTRACE=1 pnpm tauri dev` 查看完整堆栈跟踪
