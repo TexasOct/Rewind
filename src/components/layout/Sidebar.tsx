@@ -4,8 +4,8 @@ import { MenuButton } from '@/components/shared/MenuButton'
 import { useUIStore } from '@/lib/stores/ui'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/custom/system/theme/theme-toggle'
-import { LanguageToggle } from '@/components/custom/system/language/language-toggle'
+import { ThemeToggle } from '@/components/system/theme/theme-toggle'
+import { LanguageToggle } from '@/components/system/language/language-toggle'
 import { useTranslation } from 'react-i18next'
 
 interface SidebarProps {
@@ -22,6 +22,9 @@ export function Sidebar({ collapsed, mainItems, bottomItems, activeItemId, onMen
 
   return (
     <aside className={cn('flex flex-col border-r bg-card transition-all duration-200', collapsed ? 'w-16' : 'w-64')}>
+      {/* 顶部空间预留（系统窗口控制按钮） */}
+      <div className="h-5" />
+
       {/* Logo 区域 */}
       <div className="flex h-14 items-center border-b px-4">{!collapsed && <h1 className="text-lg font-semibold">Rewind</h1>}</div>
 

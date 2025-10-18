@@ -1,6 +1,6 @@
 import '@/styles/index.css'
 import '@/lib/i18n'
-import { ThemeProvider } from '@/components/custom/system/theme/theme-provider'
+import { ThemeProvider } from '@/components/system/theme/theme-provider'
 import { Outlet } from 'react-router'
 import { Toaster } from '@/components/ui/sonner'
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary'

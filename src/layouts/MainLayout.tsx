@@ -30,7 +30,7 @@ export function MainLayout() {
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden">
-      {/* 顶部拖拽区域 */}
+      {/* 顶部悬浮拖拽区域 */}
       <DragRegion />
 
       <div className="flex flex-1 overflow-hidden">

@@ -2,8 +2,11 @@ export function DragRegion() {
   return (
     <div
       data-tauri-drag-region
-      className="h-5 w-full select-none bg-background"
-      style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+      className="fixed left-0 right-0 top-0 z-50 h-5 w-full select-none"
+      style={{
+        WebkitAppRegion: 'drag',
+        WebkitUserSelect: 'none',
+      } as React.CSSProperties}
     />
   )
 }
