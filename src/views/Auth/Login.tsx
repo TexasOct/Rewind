@@ -20,12 +20,12 @@ export function LoginForm() {
   })
 
   function submit() {
-    send({
-      email: email,
-      password: password,
-      device_id: 'aaaaa',
-      platform: 'macos'
-    })
+    // send({
+    //   email: email,
+    //   password: password,
+    //   device_id: 'aaaaa',
+    //   platform: 'macos'
+    // })
   }
 
   return (

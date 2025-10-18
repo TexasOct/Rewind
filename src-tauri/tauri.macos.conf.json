@@ -7,7 +7,10 @@
     "beforeDevCommand": "pnpm run dev --host",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm run build",
-    "frontendDist": "../dist"
+    "frontendDist": "../dist",
+    "features": [
+      "pytauri/standalone"
+    ]
   },
   "app": {
     "withGlobalTauri": true,
