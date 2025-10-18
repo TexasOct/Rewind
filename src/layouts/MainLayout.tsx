@@ -43,8 +43,8 @@ export function MainLayout() {
           onMenuClick={handleMenuClick}
         />
 
-        {/* 右侧内容区域 */}
-        <main className="flex-1 overflow-hidden bg-background">
+        {/* 右侧内容区域 - 悬浮容器 */}
+        <main className="flex-1 overflow-hidden rounded-2xl bg-card border border-black/10 dark:border-white/10 m-2">
           <Outlet />
         </main>
       </div>

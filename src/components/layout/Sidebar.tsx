@@ -21,7 +21,7 @@ export function Sidebar({ collapsed, mainItems, bottomItems, activeItemId, onMen
   const { t } = useTranslation()
 
   return (
-    <aside className={cn('flex flex-col border-r bg-card transition-all duration-200', collapsed ? 'w-16' : 'w-64')}>
+    <aside className={cn('flex flex-col border-r bg-card transition-all duration-200', collapsed ? 'w-[76px]' : 'w-64')}>
       {/* 顶部空间预留（系统窗口控制按钮） */}
       <div className="h-5" />
 
@@ -84,15 +84,33 @@ export function Sidebar({ collapsed, mainItems, bottomItems, activeItemId, onMen
         </div>
 
         {/* 折叠/展开按钮 */}
-        <Button variant="ghost" size="sm" onClick={toggleSidebar} className="w-full justify-start">
-          {collapsed ? (
-            <ChevronRight className="h-5 w-5" />
-          ) : (
-            <>
-              <ChevronLeft className="h-5 w-5" />
-              <span className="ml-2">{t('common.collapse')}</span>
-            </>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleSidebar}
+          className={cn(
+            'w-full relative transition-all duration-200 flex items-center overflow-hidden',
+            collapsed ? 'justify-center' : 'justify-start'
           )}
+        >
+          {/* 展开状态的内容 */}
+          <div
+            className={cn(
+              'flex items-center gap-2 transition-all duration-200 whitespace-nowrap',
+              collapsed && 'opacity-0 -translate-x-8'
+            )}
+          >
+            <ChevronLeft className="h-5 w-5 flex-shrink-0" />
+            <span>{t('common.collapse')}</span>
+          </div>
+
+          {/* 收缩状态的图标 */}
+          <ChevronRight
+            className={cn(
+              'h-5 w-5 absolute transition-all duration-200',
+              !collapsed && 'opacity-0 translate-x-8'
+            )}
+          />
         </Button>
       </div>
     </aside>
